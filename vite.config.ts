@@ -6,7 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/vue3-pwa/',
+  base: '/puyo-programming/',
   build: {
     outDir: 'docs',
   },
