@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import TheWelcome from '@/components/TheWelcome.vue'
+import { RouteLocations } from '@/router/models'
+
+const toGame = RouteLocations.toGame()
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div>This is HomeView.</div>
+  <RouterLink v-bind:to="toGame">スタート</RouterLink>
 </template>
