@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/vue3-pwa.iml" filepath="$PROJECT_DIR$/.idea/vue3-pwa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/puyo-programming.iml" filepath="$PROJECT_DIR$/.idea/puyo-programming.iml" />
     </modules>
   </component>
 </project>
