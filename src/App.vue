@@ -5,3 +5,10 @@ import { RouterView } from 'vue-router'
 <template>
   <RouterView />
 </template>
+
+<style lang="scss">
+body {
+  margin: 0;
+  -webkit-user-select: none;
+}
+</style>
