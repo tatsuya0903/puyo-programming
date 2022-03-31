@@ -1,0 +1,32 @@
+name: release-gh-pages
+on:
+  push:
+    branches:
+      - 'main'
+      - 'issue**'
+  workflow_dispatch:
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - name: gh-pagesブランチを更新
+        run: |
+          git --version
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git branch -a
+          git checkout -b gh-pages
+          git add --all
+          git commit -a -m "deploy"
+          git push --force origin gh-pages
