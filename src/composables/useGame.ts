@@ -1,30 +1,28 @@
 import { ref } from 'vue'
-import type { Board } from '@/models/board'
+import { Game } from '@/models/game'
+import type { Board } from '@/models/puyo'
+import { createBoard } from '@/models/puyo'
+import { Stage } from '@/models/stage'
 
 export const useGame = () => {
+  const board = ref<Board>(createBoard())
   // メモリを準備する
-  const board = ref<Board>([
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-  ])
 
   const initialize = () => {
-    for (let x = 0; x < board.value.length; x++) {
-      const line = board.value[x]
-      for (let y = 0; y < line.length; y++) {
-        line[y] = null
-      }
-    }
+    // まずステージを整える
+    Game.initialize()
+
+    // ゲームを開始する
+    loop()
+  }
+
+  const loop = () => {
+    Game.loop()
+
+    board.value = Stage.board
+
+    // 1/60秒後にもう一度呼び出す
+    requestAnimationFrame(Game.loop)
   }
 
   return { initialize, board }

@@ -3,10 +3,15 @@ import { RouteLocations } from '@/router/models'
 import GameStage from '@/components/GameStage.vue'
 import GameScore from '@/components/GameScore.vue'
 import { useGame } from '@/composables/useGame'
+import { onMounted } from 'vue'
 
 const toHome = RouteLocations.toHome()
 
-const { board } = useGame()
+const { board, initialize } = useGame()
+
+onMounted(() => {
+  initialize()
+})
 </script>
 
 <template>

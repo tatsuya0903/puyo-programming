@@ -2,6 +2,23 @@ export type BoardCell = {
   puyo: PuyoColor
   element: HTMLImageElement
 }
+export type Board = (BoardCell | null)[][]
+export const createBoard = (): Board => {
+  return [
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+    [null, null, null, null, null, null],
+  ]
+}
 
 export const PuyoColors = {
   Green: 1,

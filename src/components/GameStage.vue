@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Config } from '@/models/config'
-import type { Board } from '@/models/board'
 import GameStagePuyo from '@/components/GameStagePuyo.vue'
+import type { Board } from '@/models/puyo'
 
-const props = defineProps<{
+defineProps<{
   board: Board
 }>()
 const styleObject = computed(() => {
@@ -18,9 +18,9 @@ const styleObject = computed(() => {
 
 <template>
   <div class="game-stage" v-bind:style="styleObject">
-    <div class="game-stage__row" v-for="(row, index1) in board" v-bind:key="index1">
-      <div class="game-stage__cell" v-for="(puyo, index2) in row" v-bind:key="index2">
-        <GameStagePuyo v-bind:puyo="puyo" />
+    <div class="game-stage__row" v-for="(line, index1) in board" v-bind:key="index1">
+      <div class="game-stage__cell" v-for="(cell, index2) in line" v-bind:key="index2">
+        <GameStagePuyo v-if="cell !== null" v-bind:boardCell="cell" />
       </div>
     </div>
   </div>

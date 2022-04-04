@@ -1,7 +1,7 @@
 import { Config } from '@/models/config'
 import type { BoardCell, FallingPuyo, PuyoColor, SequencePuyoInfo } from '@/models/puyo'
 import { PuyoImage } from '@/models/puyoimage'
-import { isPuyoColor } from '@/models/puyo'
+import { createBoard, isPuyoColor } from '@/models/puyo'
 
 export class Stage {
   static stageElement: HTMLDivElement
@@ -36,20 +36,7 @@ export class Stage {
     this.scoreElement = scoreElement
 
     // メモリを準備する
-    this.board = [
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-      [null, null, null, null, null, null],
-    ]
+    this.board = createBoard()
 
     const lines: (PuyoColor | 0)[][] = [
       [0, 0, 0, 0, 0, 0],
