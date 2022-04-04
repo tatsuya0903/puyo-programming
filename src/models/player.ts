@@ -1,21 +1,53 @@
-class Player {
-  // static centerPuyo;
-  // static movablePuyo;
-  // static puyoStatus;
-  // static centerPuyoElement;
-  // static movablePuyoElement;
+import { Stage } from '@/models/stage'
+import { Config } from '@/models/config'
+import { PuyoImage } from '@/models/puyoimage'
+import { Score } from '@/models/score'
+import type { PuyoColor } from '@/models/puyo'
+import { randomPuyoColor } from '@/models/puyo'
 
-  // static groundFrame;
-  // static keyStatus;
+type KeyStatus = {
+  right: boolean
+  left: boolean
+  up: boolean
+  down: boolean
+}
 
-  // static actionStartFrame;
-  // static moveSource;
-  // static moveDestination;
-  // static rotateBeforeLeft;
-  // static rotateAfterLeft;
-  // static rotateFromRotation;
+type TouchPoint = {
+  xs: number
+  ys: number
+  xe: number
+  ye: number
+}
+type PuyoStatus = {
+  x: number // 中心ぷよの位置: 左から2列目
+  y: number // 画面上部ギリギリから出てくる
+  left: number
+  top: number
+  dx: number // 動くぷよの相対位置: 動くぷよは上方向にある
+  dy: number
+  rotation: number // 動くぷよの角度は90度（上向き）
+}
 
-  static initialize() {
+export class Player {
+  static centerPuyo: PuyoColor
+  static movablePuyo: PuyoColor
+  static puyoStatus: PuyoStatus
+  static centerPuyoElement: HTMLImageElement | null
+  static movablePuyoElement: HTMLImageElement | null
+
+  static groundFrame: number
+  static keyStatus: KeyStatus
+
+  static actionStartFrame: number
+  static moveSource: number
+  static moveDestination: number
+  static rotateBeforeLeft: number
+  static rotateAfterLeft: number
+  static rotateFromRotation: number
+
+  static touchPoint: TouchPoint
+
+  static initialize(): void {
     // キーボードの入力を確認する
     this.keyStatus = {
       right: false,
@@ -95,7 +127,7 @@ class Player {
       this.touchPoint.xs = this.touchPoint.xe
       this.touchPoint.ys = this.touchPoint.ye
     })
-    document.addEventListener('touchend', (e) => {
+    document.addEventListener('touchend', () => {
       this.keyStatus.up = false
       this.keyStatus.down = false
       this.keyStatus.left = false
@@ -103,7 +135,7 @@ class Player {
     })
 
     // ジェスチャーを判定して、keyStatusプロパティを更新する関数
-    const gesture = (xs, ys, xe, ye) => {
+    const gesture = (xs: number, ys: number, xe: number, ye: number) => {
       const horizonDirection = xe - xs
       const verticalDirection = ye - ys
 
@@ -148,9 +180,8 @@ class Player {
       return false
     }
     // 新しいぷよの色を決める
-    const puyoColors = Math.max(1, Math.min(5, Config.puyoColors))
-    this.centerPuyo = Math.floor(Math.random() * puyoColors) + 1
-    this.movablePuyo = Math.floor(Math.random() * puyoColors) + 1
+    this.centerPuyo = randomPuyoColor()
+    this.movablePuyo = randomPuyoColor()
     // 新しいぷよ画像を作成する
     this.centerPuyoElement = PuyoImage.getPuyo(this.centerPuyo)
     this.movablePuyoElement = PuyoImage.getPuyo(this.movablePuyo)
@@ -174,25 +205,30 @@ class Player {
   }
 
   static setPuyoPosition() {
-    this.centerPuyoElement.style.left = this.puyoStatus.left + 'px'
-    this.centerPuyoElement.style.top = this.puyoStatus.top + 'px'
+    if (this.centerPuyoElement) {
+      this.centerPuyoElement.style.left = this.puyoStatus.left + 'px'
+      this.centerPuyoElement.style.top = this.puyoStatus.top + 'px'
+    }
     const x =
       this.puyoStatus.left +
       Math.cos((this.puyoStatus.rotation * Math.PI) / 180) * Config.puyoImgWidth
     const y =
       this.puyoStatus.top -
       Math.sin((this.puyoStatus.rotation * Math.PI) / 180) * Config.puyoImgHeight
-    this.movablePuyoElement.style.left = x + 'px'
-    this.movablePuyoElement.style.top = y + 'px'
+
+    if (this.movablePuyoElement) {
+      this.movablePuyoElement.style.left = x + 'px'
+      this.movablePuyoElement.style.top = y + 'px'
+    }
   }
 
-  static falling(isDownPressed) {
+  static falling(isDownPressed = false) {
     // 現状の場所の下にブロックがあるかどうか確認する
     let isBlocked = false
-    let x = this.puyoStatus.x
+    const x = this.puyoStatus.x
     let y = this.puyoStatus.y
-    let dx = this.puyoStatus.dx
-    let dy = this.puyoStatus.dy
+    const dx = this.puyoStatus.dx
+    const dy = this.puyoStatus.dy
     if (
       y + 1 >= Config.stageRows ||
       Stage.board[y + 1][x] ||
@@ -249,7 +285,7 @@ class Player {
       }
     }
   }
-  static playing(frame) {
+  static playing(frame: number) {
     // まず自由落下を確認する
     // 下キーが押されていた場合、それ込みで自由落下させる
     if (this.falling(this.keyStatus.down)) {
@@ -407,7 +443,7 @@ class Player {
     }
     return 'playing'
   }
-  static moving(frame) {
+  static moving(frame: number) {
     // 移動中も自然落下はさせる
     this.falling()
     const ratio = Math.min(1, (frame - this.actionStartFrame) / Config.playerMoveFrame)
@@ -418,7 +454,7 @@ class Player {
     }
     return true
   }
-  static rotating(frame) {
+  static rotating(frame: number) {
     // 回転中も自然落下はさせる
     this.falling()
     const ratio = Math.min(1, (frame - this.actionStartFrame) / Config.playerRotateFrame)
@@ -450,8 +486,12 @@ class Player {
       Stage.puyoCount++
     }
     // 操作用に作成したぷよ画像を消す
-    Stage.stageElement.removeChild(this.centerPuyoElement)
-    Stage.stageElement.removeChild(this.movablePuyoElement)
+    if (this.centerPuyoElement) {
+      Stage.stageElement.removeChild(this.centerPuyoElement)
+    }
+    if (this.movablePuyoElement) {
+      Stage.stageElement.removeChild(this.movablePuyoElement)
+    }
     this.centerPuyoElement = null
     this.movablePuyoElement = null
   }
