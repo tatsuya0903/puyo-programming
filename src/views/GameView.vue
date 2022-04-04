@@ -1,26 +1,18 @@
 <script setup lang="ts">
 import { RouteLocations } from '@/router/models'
+import GameStage from '@/components/GameStage.vue'
+import GameScore from '@/components/GameScore.vue'
+import { useGame } from '@/composables/useGame'
 
 const toHome = RouteLocations.toHome()
+
+const { board } = useGame()
 </script>
 
 <template>
-  <div>This is GameView.</div>
-  <RouterLink v-bind:to="toHome">戻る</RouterLink>
-  <div id="stage" />
-  <div id="score" />
+  <RouterLink style="position: fixed; left: 0px; top: 0px" v-bind:to="toHome">戻る</RouterLink>
+  <GameStage v-bind:board="board" />
+  <GameScore v-bind:value="1234567890" />
 </template>
 
-<style lang="scss">
-#stage {
-  position: relative;
-  margin: 0 auto;
-  overflow: hidden;
-  background-image: url(@/assets/images/puyo_2bg.png);
-}
-#score {
-  margin: 0 auto;
-  overflow: hidden;
-  text-align: right;
-}
-</style>
+<style lang="scss" scoped></style>
