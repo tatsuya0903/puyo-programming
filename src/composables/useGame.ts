@@ -22,7 +22,7 @@ export const useGame = () => {
     board.value = Stage.board
 
     // 1/60秒後にもう一度呼び出す
-    requestAnimationFrame(Game.loop)
+    requestAnimationFrame(loop)
   }
 
   return { initialize, board }
