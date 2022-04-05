@@ -18,6 +18,26 @@ onMounted(() => {
   <RouterLink style="position: fixed; left: 0px; top: 0px" v-bind:to="toHome">戻る</RouterLink>
   <GameStage v-bind:board="board" />
   <GameScore v-bind:value="1234567890" />
+
+  <div style="display: none">
+    <img src="@/assets/images/puyo_1.png" id="puyo_1" />
+    <img src="@/assets/images/puyo_2.png" id="puyo_2" />
+    <img src="@/assets/images/puyo_3.png" id="puyo_3" />
+    <img src="@/assets/images/puyo_4.png" id="puyo_4" />
+    <img src="@/assets/images/puyo_5.png" id="puyo_5" />
+    <img src="@/assets/images/batankyu.png" id="batankyu" />
+    <img src="@/assets/images/zenkeshi.png" id="zenkeshi" />
+    <img src="@/assets/images/0.png" id="font0" />
+    <img src="@/assets/images/1.png" id="font1" />
+    <img src="@/assets/images/2.png" id="font2" />
+    <img src="@/assets/images/3.png" id="font3" />
+    <img src="@/assets/images/4.png" id="font4" />
+    <img src="@/assets/images/5.png" id="font5" />
+    <img src="@/assets/images/6.png" id="font6" />
+    <img src="@/assets/images/7.png" id="font7" />
+    <img src="@/assets/images/8.png" id="font8" />
+    <img src="@/assets/images/9.png" id="font9" />
+  </div>
 </template>
 
 <style lang="scss" scoped></style>
