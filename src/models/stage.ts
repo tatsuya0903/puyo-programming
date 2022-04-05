@@ -1,7 +1,7 @@
 import { Config } from '@/models/config'
 import type { BoardCell, FallingPuyo, PuyoColor, SequencePuyoInfo } from '@/models/puyo'
 import { PuyoImage } from '@/models/puyoimage'
-import { createBoard, isPuyoColor } from '@/models/puyo'
+import { createBoard, createBoardCell, isPuyoColor } from '@/models/puyo'
 
 export class Stage {
   static stageElement: HTMLDivElement
@@ -77,10 +77,7 @@ export class Stage {
     puyoImage.style.top = y * Config.puyoImgHeight + 'px'
     this.stageElement.appendChild(puyoImage)
     // メモリにセットする
-    this.board[y][x] = {
-      puyo: puyo,
-      element: puyoImage,
-    }
+    this.board[y][x] = createBoardCell(puyo, puyoImage)
   }
 
   private static getPuyo(x: number, y: number): BoardCell | null {

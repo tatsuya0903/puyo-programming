@@ -1,4 +1,19 @@
+class Key {
+  private static num = 1
+  public static create(): number {
+    return this.num++
+  }
+}
+export const createBoardCell = (color: PuyoColor, element: HTMLImageElement): BoardCell => {
+  return {
+    key: Key.create(),
+    puyo: color,
+    element: element,
+  }
+}
+
 export type BoardCell = {
+  key: number
   puyo: PuyoColor
   element: HTMLImageElement
 }
@@ -56,4 +71,27 @@ export type SequencePuyoInfo = {
   x: number
   y: number
   cell: BoardCell
+}
+
+export class Puyo {
+  constructor(public key: number, public x: number, public y: number, public color: PuyoColor) {}
+
+  public static create(key: number, x: number, y: number, color: PuyoColor): Puyo {
+    return new Puyo(key, x, y, color)
+  }
+
+  public static createList(board: Board): Puyo[] {
+    const result: Puyo[] = []
+
+    for (let y = 0; y < board.length; y++) {
+      for (let x = 0; x < board[y].length; x++) {
+        const cell = board[y][x]
+        if (cell !== null) {
+          result.push(Puyo.create(cell.key, x, y, cell.puyo))
+        }
+      }
+    }
+
+    return result
+  }
 }

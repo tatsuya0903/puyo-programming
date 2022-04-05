@@ -28,7 +28,8 @@ const score = computed<(0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9)[]>(() => {
 </script>
 
 <template>
-  <div ref="root" id="score" v-bind:style="styleObject">
+  <div id="score" />
+  <div ref="root" v-bind:style="styleObject">
     <template v-for="(num, index) in score" v-bind:key="index">
       <GameScoreNumber v-bind:num="num" />
     </template>

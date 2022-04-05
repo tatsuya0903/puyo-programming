@@ -5,51 +5,54 @@ import img2 from '@/assets/images/puyo_2.png'
 import img3 from '@/assets/images/puyo_3.png'
 import img4 from '@/assets/images/puyo_4.png'
 import img5 from '@/assets/images/puyo_5.png'
-import type { BoardCell } from '@/models/puyo'
-import { PuyoColors } from '@/models/puyo'
+import type { PuyoColor } from '@/models/puyo'
+import { Puyo, PuyoColors } from '@/models/puyo'
+import { Config } from '@/models/config'
 const props = defineProps<{
-  boardCell: BoardCell
+  puyo: Puyo
 }>()
 
-const styleObject = computed(() => {
-  const puyoColor = props.boardCell.puyo
-  switch (puyoColor) {
+const calcBackgroundImage = (color: PuyoColor): string | null => {
+  switch (color) {
     case PuyoColors.Green:
-      return {
-        backgroundImage: `url(${img1})`,
-      }
+      return `url(${img1})`
     case PuyoColors.Blue:
-      return {
-        backgroundImage: `url(${img2})`,
-      }
+      return `url(${img2})`
     case PuyoColors.Purple:
-      return {
-        backgroundImage: `url(${img3})`,
-      }
+      return `url(${img3})`
     case PuyoColors.Red:
-      return {
-        backgroundImage: `url(${img4})`,
-      }
+      return `url(${img4})`
     case PuyoColors.Yellow:
-      return {
-        backgroundImage: `url(${img5})`,
-      }
+      return `url(${img5})`
     default:
       return null
+  }
+}
+
+const styleObject = computed(() => {
+  return {
+    left: `${props.puyo.x * Config.puyoImgWidth}px`,
+    top: `${props.puyo.y * Config.puyoImgHeight}px`,
+    width: `${Config.puyoImgWidth}px`,
+    height: `${Config.puyoImgHeight}px`,
+    backgroundImage: calcBackgroundImage(props.puyo.color),
   }
 })
 </script>
 
 <template>
-  <div class="game-stage-puyo" v-bind:style="styleObject" />
+  <div class="game-stage-puyo" v-bind:style="styleObject">
+    {{ puyo.y + 1 }},{{ puyo.x + 1 }}({{ puyo.key }})
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .game-stage-puyo {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  border: 1px red dashed;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  font-size: 12px;
 }
 </style>

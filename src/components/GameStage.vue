@@ -1,19 +1,19 @@
 <script setup lang="ts">
+import type { Puyo } from '@/models/puyo'
 import GameStagePuyo from '@/components/GameStagePuyo.vue'
-import type { Board } from '@/models/puyo'
 
 defineProps<{
-  board: Board
+  puyoList: Puyo[]
 }>()
 </script>
 
 <template>
   <div id="stage" class="game-stage">
-    <div class="game-stage__row" v-for="(line, index1) in board" v-bind:key="index1">
-      <div class="game-stage__cell" v-for="(cell, index2) in line" v-bind:key="index2">
-        <GameStagePuyo v-if="cell !== null" v-bind:boardCell="cell" />
-      </div>
-    </div>
+    <transition-group name="flip-list">
+      <template v-for="puyo in puyoList" v-bind:key="puyo.key">
+        <GameStagePuyo v-bind:puyo="puyo" />
+      </template>
+    </transition-group>
   </div>
 </template>
 
@@ -26,18 +26,9 @@ defineProps<{
   overflow: hidden;
   background-image: url(@/assets/images/puyo_2bg.png);
   box-sizing: border-box;
-
-  .game-stage__row {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-  }
-
-  .game-stage__cell {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-  }
+  border: 1px green dashed;
+}
+.flip-list-move {
+  transition: transform 0.25s ease;
 }
 </style>

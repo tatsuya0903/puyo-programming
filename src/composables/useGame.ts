@@ -1,11 +1,10 @@
 import { ref } from 'vue'
 import { Game } from '@/models/game'
-import type { Board } from '@/models/puyo'
-import { createBoard } from '@/models/puyo'
+import { Puyo } from '@/models/puyo'
 import { Stage } from '@/models/stage'
 
 export const useGame = () => {
-  const board = ref<Board>(createBoard())
+  const puyoList = ref<Puyo[]>([])
   // メモリを準備する
 
   const initialize = () => {
@@ -19,11 +18,12 @@ export const useGame = () => {
   const loop = () => {
     Game.loop()
 
-    board.value = Stage.board
+    puyoList.value.splice(0)
+    puyoList.value.push(...Puyo.createList(Stage.board))
 
     // 1/60秒後にもう一度呼び出す
     requestAnimationFrame(loop)
   }
 
-  return { initialize, board }
+  return { initialize, puyoList }
 }
