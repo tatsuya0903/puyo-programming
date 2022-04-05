@@ -1,23 +1,14 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { Config } from '@/models/config'
 import GameStagePuyo from '@/components/GameStagePuyo.vue'
 import type { Board } from '@/models/puyo'
 
 defineProps<{
   board: Board
 }>()
-const styleObject = computed(() => {
-  return {
-    width: `${Config.puyoImgWidth * Config.stageCols}px`,
-    height: `${Config.puyoImgHeight * Config.stageRows}px`,
-    backgroundColor: Config.stageBackgroundColor,
-  }
-})
 </script>
 
 <template>
-  <div class="game-stage" v-bind:style="styleObject">
+  <div id="stage" class="game-stage">
     <div class="game-stage__row" v-for="(line, index1) in board" v-bind:key="index1">
       <div class="game-stage__cell" v-for="(cell, index2) in line" v-bind:key="index2">
         <GameStagePuyo v-if="cell !== null" v-bind:boardCell="cell" />
